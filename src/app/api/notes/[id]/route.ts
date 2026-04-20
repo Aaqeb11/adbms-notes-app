@@ -1,13 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { ObjectId } from "mongodb";
 
-interface Params {
-  params: { id: string };
-}
+export async function DELETE(
+  req: NextRequest,
+  ctx: RouteContext<"/api/notes/[id]">,
+) {
+  const { id } = await ctx.params;
 
-export async function DELETE(req: NextRequest, { params }: Params) {
   const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -16,7 +18,6 @@ export async function DELETE(req: NextRequest, { params }: Params) {
   const db = await getDb();
   const notes = db.collection("notes");
 
-  const { id } = await params;
   const noteId = new ObjectId(id);
 
   const result = await notes.deleteOne({
@@ -31,7 +32,12 @@ export async function DELETE(req: NextRequest, { params }: Params) {
   return NextResponse.json({ success: true });
 }
 
-export async function PATCH(req: NextRequest, { params }: Params) {
+export async function PATCH(
+  req: NextRequest,
+  ctx: RouteContext<"/api/notes/[id]">,
+) {
+  const { id } = await ctx.params;
+
   const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -49,7 +55,6 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   const db = await getDb();
   const notes = db.collection("notes");
 
-  const { id } = await params;
   const noteId = new ObjectId(id);
 
   const result = await notes.updateOne(
