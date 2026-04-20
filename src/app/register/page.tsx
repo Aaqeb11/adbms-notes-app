@@ -67,7 +67,7 @@ export default function RegisterPage() {
           </div>
           {error && <p className="text-sm text-red-500">{error}</p>}
           {success && <p className="text-sm text-emerald-600">{success}</p>}
-          <Button type="submit" className="w-full" className="cursor-pointer">
+          <Button type="submit" className="w-full cursor-pointer">
             Create account
           </Button>
         </form>
